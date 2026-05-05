@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article class="post-page">
+  <header class="post-header">
+    <span class="post-tag">{{ page.categories | join: ' · ' | default: 'Article' }}</span>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-meta-line">{{ page.date | date: "%B %d, %Y" }} · {{ content | number_of_words | divided_by: 200 | plus: 1 }} min read</p>
+  </header>
+  <div class="post-body">
+    {{ content }}
+  </div>
+  <div class="post-footer">
+    <a href="{{ '/blog' | relative_url }}" class="btn btn-outline">← All Articles</a>
+    <a href="https://linkedin.com/in/mangeshtekale" target="_blank" rel="noopener" class="btn btn-ghost">Connect on LinkedIn</a>
+  </div>
+</article>

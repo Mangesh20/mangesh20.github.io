@@ -1,9 +1,9 @@
-----
+---
 layout: post
 title: "AES Encryption and Decryption in Flutter using the encrypt Package"
 date: 2023-04-30 23:45:00 -0530
-categories: CATEGORY-1 CATEGORY-2
-----
+categories: Flutter Security
+---
 
 Introduction
 

@@ -1,0 +1,33 @@
+---
+layout: default
+title: Tech Articles
+description: Technical articles on iOS development, Flutter, mobile architecture, and engineering practices by Mangesh Tekale.
+permalink: /blog/
+---
+
+<div class="blog-page">
+  <div class="container">
+    <h1 class="blog-page-title fade-in">Tech Articles</h1>
+    <p class="blog-page-sub fade-in">Notes on iOS, Flutter, mobile architecture, and engineering practices.</p>
+
+    <div class="blog-list">
+      {% for post in site.posts %}
+      <div class="blog-list-item fade-in">
+        <div>
+          <p class="post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
+          <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 45 }}</p>
+        </div>
+        <span class="post-arrow">→</span>
+      </div>
+      {% endfor %}
+
+      {% if site.posts.size == 0 %}
+      <div style="text-align: center; padding: 80px 0; color: var(--text-muted);">
+        <p style="font-size: 1.1rem; margin-bottom: 12px; color: var(--text-2);">More articles coming soon.</p>
+        <p style="font-size: 0.9rem;">In the meantime, connect on <a href="https://linkedin.com/in/mangeshtekale">LinkedIn</a>.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
