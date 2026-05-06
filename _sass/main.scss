@@ -849,7 +849,7 @@ footer {
 .post-page {
   padding-top: 120px;
   padding-bottom: 80px;
-  max-width: 740px;
+  max-width: 820px;
   margin: 0 auto;
   padding-left: 24px;
   padding-right: 24px;
@@ -893,6 +893,12 @@ footer {
   line-height: 1.8;
   color: var(--text-2);
 }
+.post-body > p:first-child {
+  font-size: 1.2rem;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 1.25em;
+}
 .post-body h1, .post-body h2, .post-body h3,
 .post-body h4, .post-body h5, .post-body h6 {
   color: var(--text);
@@ -903,9 +909,9 @@ footer {
 .post-body h1:first-child, .post-body h2:first-child { margin-top: 0; }
 .post-body h1 { font-size: 2rem; }
 .post-body h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4em; }
-.post-body h3 { font-size: 1.2rem; }
+.post-body h3 { font-size: 1.15rem; }
 .post-body p { margin-bottom: 1.5em; }
-.post-body ul, .post-body ol { margin: 0 0 1.5em 1.5em; }
+.post-body ul, .post-body ol { margin: 0 0 1.5em 1.25em; padding-left: 1.1em; }
 .post-body li { margin-bottom: 0.5em; }
 .post-body code {
   font-family: var(--mono);
@@ -916,13 +922,23 @@ footer {
   border-radius: 4px;
   color: var(--accent-2);
 }
+.post-body figure.highlight,
+.post-body .code-block {
+  position: relative;
+  margin: 0 0 1.8em;
+}
+.post-body figure.highlight {
+  background: none;
+}
 .post-body pre {
-  background: var(--bg-2);
+  background: #f6f8fa;
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 20px 24px;
+  border-radius: var(--radius);
+  padding: 48px 24px 22px;
   overflow-x: auto;
-  margin: 0 0 1.5em;
+  margin: 0;
+  box-shadow: var(--shadow-card);
+  outline: none;
 }
 .post-body pre code {
   background: none;
@@ -930,18 +946,43 @@ footer {
   padding: 0;
   font-size: 0.9rem;
   color: var(--text);
+  line-height: 1.75;
+  white-space: pre;
+}
+.copy-code-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.copy-code-button:hover,
+.copy-code-button.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #ffffff;
 }
 .post-body blockquote {
-  border-left: 3px solid var(--accent);
-  padding: 14px 24px;
-  margin: 0 0 1.5em;
-  background: var(--bg-2);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border: 1px solid rgba(9, 105, 218, 0.18);
+  border-left: 4px solid var(--accent);
+  padding: 16px 20px;
+  margin: 0 0 1.6em;
+  background: var(--accent-glow);
+  border-radius: var(--radius-sm);
 }
-.post-body blockquote p { margin-bottom: 0; color: var(--text-muted); font-style: italic; }
+.post-body blockquote p { margin-bottom: 0; color: var(--text-2); }
 .post-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .post-body strong { color: var(--text); font-weight: 700; }
-.post-body a { text-decoration: underline; text-underline-offset: 3px; }
+.post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .post-body img { border-radius: var(--radius); border: 1px solid var(--border); margin: 1em 0; }
 .post-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; font-size: 0.9rem; }
 .post-body th, .post-body td { padding: 10px 16px; border: 1px solid var(--border); text-align: left; }

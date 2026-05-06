@@ -70,6 +70,47 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.post-body pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code) return;
+
+      const figure = pre.closest('figure');
+      let block = figure;
+
+      if (!block) {
+        block = document.createElement('div');
+        pre.parentNode.insertBefore(block, pre);
+        block.appendChild(pre);
+      }
+      if (block.classList.contains('code-block')) return;
+
+      block.classList.add('code-block');
+      pre.setAttribute('tabindex', '0');
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.textContent = 'Copy';
+      button.setAttribute('aria-label', 'Copy code snippet');
+      block.appendChild(button);
+
+      button.addEventListener('click', async () => {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = 'Copied';
+          button.classList.add('copied');
+          window.setTimeout(() => {
+            button.textContent = 'Copy';
+            button.classList.remove('copied');
+          }, 1800);
+        } catch (error) {
+          button.textContent = 'Select';
+          pre.focus();
+        }
+      });
+    });
   </script>
 </body>
 </html>
