@@ -87,26 +87,43 @@
 
       block.classList.add('code-block');
       pre.setAttribute('tabindex', '0');
+      const languageClass = Array.from(code.classList).find((c) => c.startsWith('language-'));
+      const language = (code.dataset.lang || (languageClass ? languageClass.replace('language-', '') : 'code')).toUpperCase();
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'code-toolbar';
+
+      const lang = document.createElement('span');
+      lang.className = 'code-lang';
+      lang.textContent = language;
+      toolbar.appendChild(lang);
 
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'copy-code-button';
-      button.textContent = 'Copy';
+      button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V7zm-6 4a2 2 0 0 1 2-2h1v2H5v8h8v1a2 2 0 0 0 .15.76A2 2 0 0 1 12 21H5a2 2 0 0 1-2-2v-8z"/></svg>';
       button.setAttribute('aria-label', 'Copy code snippet');
-      block.appendChild(button);
+      button.setAttribute('title', 'Copy');
+      toolbar.appendChild(button);
+
+      block.insertBefore(toolbar, pre);
 
       button.addEventListener('click', async () => {
         const text = code.innerText;
         try {
           await navigator.clipboard.writeText(text);
-          button.textContent = 'Copied';
+          button.setAttribute('title', 'Copied');
+          button.setAttribute('aria-label', 'Copied');
+          button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 6.7a1 1 0 0 1 0 1.4l-9 9a1 1 0 0 1-1.4 0l-4.2-4.2a1 1 0 0 1 1.4-1.4l3.5 3.5 8.3-8.3a1 1 0 0 1 1.4 0z"/></svg>';
           button.classList.add('copied');
           window.setTimeout(() => {
-            button.textContent = 'Copy';
             button.classList.remove('copied');
+            button.setAttribute('title', 'Copy');
+            button.setAttribute('aria-label', 'Copy code snippet');
+            button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V7zm-6 4a2 2 0 0 1 2-2h1v2H5v8h8v1a2 2 0 0 0 .15.76A2 2 0 0 1 12 21H5a2 2 0 0 1-2-2v-8z"/></svg>';
           }, 1800);
         } catch (error) {
-          button.textContent = 'Select';
+          button.setAttribute('title', 'Select and copy');
           pre.focus();
         }
       });
