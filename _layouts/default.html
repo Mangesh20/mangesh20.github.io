@@ -71,6 +71,27 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+    document.querySelectorAll('.blog-list-item').forEach((item) => {
+      const link = item.querySelector('h2 a');
+      if (!link) return;
+
+      item.setAttribute('role', 'link');
+      item.setAttribute('tabindex', '0');
+      item.style.cursor = 'pointer';
+
+      item.addEventListener('click', (event) => {
+        if (event.target.closest('a')) return;
+        window.location.href = link.href;
+      });
+
+      item.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          window.location.href = link.href;
+        }
+      });
+    });
+
     document.querySelectorAll('.post-body pre').forEach((pre) => {
       const code = pre.querySelector('code');
       if (!code) return;
