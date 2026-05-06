@@ -5,45 +5,47 @@ date: 2023-04-30 23:45:00 -0530
 categories: Flutter Security
 ---
 
-Introduction
+Encryption is a critical part of application security, and AES (Advanced Encryption Standard) is one of the most widely used symmetric encryption algorithms. In Flutter, the [`encrypt`](https://pub.dev/packages/encrypt) package gives you a straightforward API for encrypting and decrypting values in Dart.
 
-Encryption is a critical aspect of data security, and AES (Advanced Encryption Standard) is one of the most widely used symmetric encryption algorithms. In Flutter, developers can use the encrypt package to implement AES encryption and decryption.
+This guide walks through AES modes, keys, IVs, padding, and a small Flutter-ready example you can adapt in your app.
 
+## AES Modes
 
-AES Modes
-The encrypt package provides several AES modes, including:
+The `encrypt` package supports several AES modes:
 
-ECB (Electronic Code Book)
+- `ECB` - Electronic Code Book
+- `CBC` - Cipher Block Chaining
+- `CFB` - Cipher Feedback
+- `OFB` - Output Feedback
+- `CTR` - Counter
 
-CBC (Cipher Block Chaining)
+Each mode has different security and operational tradeoffs. For most app data, avoid `ECB` because it can leak patterns in repeated plaintext blocks. Prefer a mode that uses a fresh IV or nonce for each encryption operation, such as `CBC` or `CTR`, depending on your protocol and backend requirements.
 
-CFB (Cipher Feedback)
+## Secret Key and IV
 
-OFB (Output Feedback)
+AES needs a secret key. Some modes also need an initialization vector (IV), which helps prevent repeated plaintext from producing repeated ciphertext.
 
-CTR (Counter)
+- Keep the secret key private and never hard-code production keys in the app binary.
+- Generate a fresh IV when the selected AES mode requires one.
+- Store or transmit the IV alongside the ciphertext when needed. The IV is not secret, but it must match during decryption.
 
-Each mode has its advantages and disadvantages, depending on the specific use case. For instance, ECB is relatively simple and efficient, but it can be vulnerable to certain attacks, such as replay attacks.
+## Padding
 
+Padding adds bytes to plaintext so it matches the AES block size. The `encrypt` package supports padding options such as:
 
-Secret Key and IV
-To use AES encryption, you need a secret key and an initialization vector (IV). The secret key is a shared secret between the sender and receiver, and it is used to encrypt and decrypt the data. The IV is a random value that is used to initialize the encryption process and prevent patterns in the encrypted data. The IV is typically included in the encrypted data or transmitted separately.
+- `PKCS7`
+- `ISO10126`
+- `ANSI X.923`
 
+Your padding choice must be consistent between encryption and decryption.
 
-Padding
-Padding is also an essential aspect of AES encryption. Padding refers to adding extra data to the input data to ensure that it meets the block size requirements of the AES algorithm. The encrypt package provides several padding options, including:
+## Flutter AES Example
 
-PKCS7
+The example below shows the basic flow with the `encrypt` package. It creates a 32-byte key, a 16-byte IV, encrypts a string, prints the Base64 ciphertext, and then decrypts it.
 
-ISO10126
+> For production apps, generate and manage keys through a secure key management flow. This sample is intentionally small so the API shape is easy to see.
 
-ANSI X.923
-
-AES Encryption and Decryption in Flutter using the Encrypt Package Example
-Let's look at an example of using AES encryption and decryption in Flutter with the ECB mode:
-
-{% highlight swift %}
-
+```dart
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 void main() {
@@ -51,60 +53,46 @@ void main() {
   final iv = encrypt.IV.fromLength(16);
   final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
-   // Encrypt
-  final plainText = 'some random text';
+  const plainText = 'some random text';
+
   final encrypted = encrypter.encrypt(plainText, iv: iv);
+  print(encrypted.base64);
 
-   // output something like >r/qtHYIy6OfJJ8805uFY80MfmuvXVSapuXOk4dTbY5s=
-   print(encrypted.base64); 
-
-   // Decrypt
- final decrypted = encrypter.decrypt(encrypted, iv: iv);
- print(decrypted); // output > 'some random text'
-
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
+  print(decrypted);
 }
+```
 
-{% endhighlight %}
+## Optional IV Field
 
+The IV field is optional for `ECB` because that mode does not use an IV. Even so, if you switch modes later, keeping the encryption call shape consistent can reduce mistakes. The more important production guidance is to choose a mode appropriate for your threat model and avoid `ECB` for sensitive data.
 
-In this example, we first generate a random 32-byte secret key and a random 16-byte IV. We then create an Encrypter instance with the AES algorithm and the secret key. We use the encrypt method to encrypt the plain text with the ECB mode and the provided IV. We then use the decrypt method to decrypt the encrypted data with the same IV.
+## Conclusion
 
+The `encrypt` package is a convenient way to add AES encryption and decryption to Flutter projects. Pick the AES mode deliberately, protect your key, use IVs correctly, and keep encryption and decryption settings consistent.
 
-Optional IV Field
-Note that the IV is optional for the ECB mode because this mode does not use IV. However, it is still recommended to provide an IV to ensure consistency with other modes and to avoid potential errors.
+## FAQs
 
+### What is AES encryption?
 
-Conclusion
-In conclusion, the encrypt package provides a convenient and reliable way to implement AES encryption and decryption in Flutter. Developers can choose from different AES modes, use a secret key and IV for security, and apply padding as needed. By following best practices and understanding the nuances of AES encryption, developers can build secure and robust Flutter applications.
+AES is a symmetric encryption algorithm used to secure data in transit or at rest. It is widely used because it is efficient and well studied.
 
+### What is the `encrypt` package in Flutter?
 
-FAQs
+`encrypt` is a Dart package that provides APIs for encryption and decryption, including AES support.
 
-What is AES encryption?
+### What AES modes does the `encrypt` package support?
 
-AES (Advanced Encryption Standard) is a symmetric encryption algorithm used to secure data in transit or at rest. It is widely used due to its high level of security and efficiency.
+It supports modes including `ECB`, `CBC`, `CFB`, `OFB`, and `CTR`.
 
-What is the Encrypt package in Flutter?
+### What is a secret key?
 
-The Encrypt package is a Flutter package that provides a convenient way to implement AES encryption and decryption in your application.
+A secret key is the private value used to encrypt and decrypt data. Anyone with the key can decrypt the ciphertext, so it must be protected.
 
-What are the different AES modes available in the Encrypt package?
+### What is an initialization vector?
 
-The Encrypt package provides several AES modes, including ECB, CBC, CFB, OFB, and CTR.
+An initialization vector, or IV, is a value used by many AES modes to make encryption output less predictable. It usually does not need to be secret, but it must be available for decryption.
 
-What is a secret key?
+### What is padding?
 
-A secret key is a shared secret between the sender and receiver used to encrypt and decrypt the data. It is an essential component of AES encryption.
-
-What is an initialization vector (IV)?
-
-An initialization vector (IV) is a random value used to initialize the encryption process and prevent patterns in the encrypted data. It is another crucial component of AES encryption.
-
-What is padding?
-
-Padding refers to adding extra data to the input data to ensure that it meets the block size requirements of the AES algorithm. The Encrypt package provides several padding options, including PKCS7, ISO10126, and ANSI X.923.
-
-Is the IV field optional?
-
-The IV field is optional for the ECB mode because this mode does not use IV. However, it is still recommended to provide an IV to ensure consistency with other modes and to avoid potential errors.
-
+Padding adds extra bytes to plaintext so it fits AES block-size requirements. Common padding options include `PKCS7`, `ISO10126`, and `ANSI X.923`.
