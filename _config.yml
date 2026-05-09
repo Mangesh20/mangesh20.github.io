@@ -27,6 +27,7 @@ baseurl: ""
 url: "https://mangesh20.github.io"
 linkedin_username: mangeshtekale
 github_username: mangesh20
+image: /assets/images/mangesh_potrait.jpeg
 
 # Build settings — custom layouts, no theme
 plugins:
